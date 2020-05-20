@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1044649497505",
+    "firebase_url": "https://odborkovnik.firebaseio.com",
+    "project_id": "odborkovnik",
+    "storage_bucket": "odborkovnik.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1044649497505:android:9e4e6b16a43944728831e0",
+        "android_client_info": {
+          "package_name": "sk.skauting.odborkovnk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1044649497505-q7m72edjnsg0dln52sgfm678i8ppcd8b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sk.skauting.odborkovnk",
+            "certificate_hash": "0504e5716cd0d7dcbf27dc45d49f5f594e2b0043"
+          }
+        },
+        {
+          "client_id": "1044649497505-o0fegsld3h76pak2o7qqgnv4c6k4peoe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKtN4Os_r2KhsO3FX1ckOjjxJAMz5yS1g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1044649497505-o0fegsld3h76pak2o7qqgnv4c6k4peoe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
