@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".RegisterActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,16 +21,49 @@
         tools:ignore="MissingConstraints">
 
         <EditText
-            android:id="@+id/editTextEmail"
+            android:id="@+id/regTextEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:autofillHints=""
             android:hint="@string/emailAdress"
             android:inputType="textEmailAddress" />
 
         <EditText
-            android:id="@+id/editTextPassword"
+            android:id="@+id/regTextFullName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:hint="@string/fullname"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/regTextScoutNickName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:hint="@string/scoutNickname"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/regTextUnit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:hint="@string/unit"
+            android:importantForAutofill="no"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/regTextPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:hint="@string/password"
+            android:importantForAutofill="no"
+            android:inputType="textPassword" />
+
+        <EditText
+            android:id="@+id/regConfTextPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
@@ -39,19 +72,20 @@
             android:inputType="textPassword" />
 
         <Button
-            android:id="@+id/buttonLogin"
+            android:id="@+id/buttonRegister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-            android:text="@string/login" />
+            android:text="@string/register" />
 
         <TextView
-            android:id="@+id/textViewRegister"
+            android:id="@+id/textViewRegistered"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Don't have an account yet? Register here"
+            android:text="Already registered ? Sign in here"
             android:textAlignment="center" />
 
     </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

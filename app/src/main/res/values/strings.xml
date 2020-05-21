@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Odborkovník</string>
+    <string name="login">Login</string>
+    <string name="emailAdress">Enter email adress</string>
+    <string name="password">Enter your password</string>
+    <string name="register">Register</string>
+    <string name="fullname">Enter your fullname</string>
+    <string name="scoutNickname">Enter your scout nickname</string>
+    <string name="confPassword">Confirm your password</string>
+    <string name="unit">Enter your scout unit</string>
 </resources>
