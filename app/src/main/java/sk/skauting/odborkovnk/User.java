@@ -8,7 +8,6 @@ public class User {
     private String scoutUnit;
     private String password;
 
-
     public User() {
     }
 
@@ -44,6 +43,26 @@ public class User {
 
     public String getPassword() {
         return password;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
+    public void setScoutNickname(String scoutNickname) {
+        this.scoutNickname = scoutNickname;
+    }
+
+    public void setScoutUnit(String scoutUnit) {
+        this.scoutUnit = scoutUnit;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
 

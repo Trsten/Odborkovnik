@@ -3,6 +3,7 @@ package sk.skauting.odborkovnk;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -17,6 +18,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -32,8 +34,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private EditText editTextConfpassword;
     private TextView textViewRegistered;
 
+    private ProgressDialog progressDialog;
+
     private FirebaseDatabase database;
-    private DatabaseReference mDataBase;
+    private DatabaseReference refDatabase;
     private FirebaseAuth fireBaseAuth;
 
     private static final String USER = "user";
@@ -53,8 +57,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         editTextConfpassword = (EditText) findViewById(R.id.regConfTextPassword);
         textViewRegistered = (TextView)  findViewById(R.id.textViewRegistered);
 
+        progressDialog = new ProgressDialog(this);
+
         database = FirebaseDatabase.getInstance();
-        mDataBase = database.getReference("user");
+        refDatabase = database.getReference("user");
         fireBaseAuth = FirebaseAuth.getInstance();
 
         buttonRegister.setOnClickListener(this);
@@ -78,6 +84,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             Toast.makeText(this,"Please enter password", Toast.LENGTH_SHORT).show();
             return;
         }
+        if ( !password.equals(confPassword) ) {
+            Toast.makeText(this,"passwords don't match", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (TextUtils.isEmpty(fullname) ) {
+            Toast.makeText(this,"Please enter your fullname", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if (TextUtils.isEmpty(scoutNickname) ) {
             Toast.makeText(this,"Please enter your scout nickname", Toast.LENGTH_SHORT).show();
             return;
@@ -87,10 +101,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             return;
         }
 
-        if ( !password.equals(confPassword) ) {
-            Toast.makeText(this,"passwords don't match", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        progressDialog.setMessage("Create account...");
+        progressDialog.show();
         user = new User(email,fullname,scoutNickname,scoutUnit,password);
 
         fireBaseAuth.createUserWithEmailAndPassword(email, password)
@@ -98,21 +110,23 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            //FirebaseUser user = fireBaseAuth.getCurrentUser();
-                            Toast.makeText(RegisterActivity.this, "Authentication failed.",
+                            Toast.makeText(RegisterActivity.this, "Account successfully created",
                                     Toast.LENGTH_SHORT).show();
+                            FirebaseUser user = fireBaseAuth.getCurrentUser();
                             updateUI();
                         } else {
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(RegisterActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            String msg = task.getException().getMessage();
+                            if ( task.getException() instanceof FirebaseAuthWeakPasswordException) {
+                                Toast.makeText(RegisterActivity.this, "Password should be at least 6 characters ",
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(RegisterActivity.this, msg,Toast.LENGTH_SHORT).show();
+                            }
                         }
-                        // ...
+                        progressDialog.cancel();
                     }
                 });
     }
-
     @Override
     public void onClick(View v) {
         if (v == buttonRegister) {
@@ -126,8 +140,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public void updateUI() {
-        String keyId = mDataBase.push().getKey();
-        mDataBase.child(keyId).setValue(user);
+        String keyId = refDatabase.push().getKey();
+        refDatabase.child(keyId).setValue(user);
 
         Intent loginIntent = new Intent(this,MainActivity.class);
         startActivity(loginIntent);

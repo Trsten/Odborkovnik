@@ -19,8 +19,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -93,7 +91,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(MainActivity.this, "Authentication Succes.",Toast.LENGTH_SHORT).show();
                             FirebaseUser user = fireBaseAuth.getCurrentUser();
                             updateUI(user);
                         } else {
@@ -113,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void updateUI(FirebaseUser currentUser) {
-        Intent profileActivity = new Intent(this, ProfileActivity.class);
+        Intent profileActivity = new Intent(this, HomeActivity.class);
         profileActivity.putExtra("email",currentUser.getEmail());
         startActivity(profileActivity);
     }

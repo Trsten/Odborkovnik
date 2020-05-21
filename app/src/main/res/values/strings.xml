@@ -8,4 +8,6 @@
     <string name="scoutNickname">Enter your scout nickname</string>
     <string name="confPassword">Confirm your password</string>
     <string name="unit">Enter your scout unit</string>
+    <string name="noAccount">Don\'t have an account yet? Register here</string>
+    <string name="registered">Already registered ? Sign in here</string>
 </resources>
