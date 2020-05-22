@@ -1,5 +1,9 @@
 package sk.skauting.odborkovnk;
 
+import java.util.ArrayList;
+
+import sk.skauting.odborkovnk.Odborka;
+
 public class User {
 
     private String email;
@@ -14,7 +18,6 @@ public class User {
     public User(String email, String password) {
         this.email = email;
         this.password = password;
-
     }
 
     public User(String email, String fullname, String scoutNickname, String scoutUnit, String password) {
@@ -23,6 +26,7 @@ public class User {
         this.scoutNickname = scoutNickname;
         this.scoutUnit = scoutUnit;
         this.password = password;
+
     }
 
     public String getEmail() {
@@ -64,5 +68,6 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
 }
 

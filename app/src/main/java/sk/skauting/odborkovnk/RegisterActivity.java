@@ -3,11 +3,12 @@ package sk.skauting.odborkovnk;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import sk.skauting.odborkovnk.TaskForOdborka;
+
+
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,13 +16,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener  {
 
@@ -42,6 +47,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     private static final String USER = "user";
     private User user;
+    private TaskForOdborka ulohy;
+    private Odborka odborka;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +67,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         progressDialog = new ProgressDialog(this);
 
         database = FirebaseDatabase.getInstance();
-        refDatabase = database.getReference("user");
+        refDatabase = database.getReference("users");
         fireBaseAuth = FirebaseAuth.getInstance();
 
         buttonRegister.setOnClickListener(this);
@@ -103,9 +110,10 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         progressDialog.setMessage("Create account...");
         progressDialog.show();
+
         user = new User(email,fullname,scoutNickname,scoutUnit,password);
 
-        fireBaseAuth.createUserWithEmailAndPassword(email, password)
+        fireBaseAuth.createUserWithEmailAndPassword(email,password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -122,10 +130,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             } else {
                                 Toast.makeText(RegisterActivity.this, msg,Toast.LENGTH_SHORT).show();
                             }
-                        }
                         progressDialog.cancel();
+                        }
                     }
                 });
+
     }
     @Override
     public void onClick(View v) {
@@ -134,8 +143,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
 
         if (v == textViewRegistered) {
-            Intent mainActivity = new Intent(this, MainActivity.class);
-            startActivity(mainActivity);
+            finish();
         }
     }
 
@@ -143,8 +151,25 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         String keyId = refDatabase.push().getKey();
         refDatabase.child(keyId).setValue(user);
 
-        Intent loginIntent = new Intent(this,MainActivity.class);
-        startActivity(loginIntent);
+        ulohy = new TaskForOdborka("Urob kotrmelec", 1, false);
+
+        TaskForOdborka taskForOdborka = new TaskForOdborka("Urob kotrmelec", 1, false);
+        TaskForOdborka taskForOdborka2 = new TaskForOdborka("Urob backflip", 2, false);
+        Map<String,TaskForOdborka> tasks = new HashMap<>();
+
+        odborka = new Odborka("Trident",tasks);
+        Odborka odborka1 = new Odborka("Workout",tasks);
+
+        refDatabase =  database.getReference("users/" + keyId + "/odborky");
+        String  keyIdChild = refDatabase.push().getKey();
+        refDatabase.child(keyIdChild).setValue(odborka);
+
+
+
+        //refDatabase = database.getReference("users/" + keyId + "/odborky")
+
+
+        finish();
     }
 
 }

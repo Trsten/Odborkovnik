@@ -2,15 +2,19 @@ package sk.skauting.odborkovnk;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -39,6 +43,14 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               createOdborka();
+            }
+        });
+
         textViewFullname = (TextView) findViewById(R.id.textViewFullname);
         textViewSUnit = (TextView) findViewById(R.id.textViewSUnit);
         textViewSNickName = (TextView) findViewById(R.id.textViewSNickname);
@@ -47,9 +59,9 @@ public class HomeActivity extends AppCompatActivity {
         Intent intent = getIntent();
         email = intent.getStringExtra("email");
 
-        //firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
-        refDatabase = database.getReference("user");
+        refDatabase = database.getReference("users");
 
         refDatabase.addValueEventListener(new ValueEventListener() {
             @Override
@@ -66,9 +78,13 @@ public class HomeActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Toast.makeText(HomeActivity.this, "Something went wrong",Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void createOdborka() {
+
     }
 
 }
