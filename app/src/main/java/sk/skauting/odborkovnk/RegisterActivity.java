@@ -3,8 +3,6 @@ package sk.skauting.odborkovnk;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import sk.skauting.odborkovnk.TaskForOdborka;
-
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -14,6 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.AuthResult;
@@ -24,7 +23,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,8 +45,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     private static final String USER = "user";
     private User user;
-    private TaskForOdborka ulohy;
-    private Odborka odborka;
+    private Map<String, TaskChallenge> ulohy;
+    private Challenge challenge;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +70,9 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         buttonRegister.setOnClickListener(this);
         textViewRegistered.setOnClickListener(this);
+
+        ulohy = new HashMap<>();
+
     }
 
     public void registerUser() {
@@ -150,24 +151,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     public void updateUI() {
         String keyId = refDatabase.push().getKey();
         refDatabase.child(keyId).setValue(user);
-
-        ulohy = new TaskForOdborka("Urob kotrmelec", 1, false);
-
-        TaskForOdborka taskForOdborka = new TaskForOdborka("Urob kotrmelec", 1, false);
-        TaskForOdborka taskForOdborka2 = new TaskForOdborka("Urob backflip", 2, false);
-        Map<String,TaskForOdborka> tasks = new HashMap<>();
-
-        odborka = new Odborka("Trident",tasks);
-        Odborka odborka1 = new Odborka("Workout",tasks);
-
-        refDatabase =  database.getReference("users/" + keyId + "/odborky");
-        String  keyIdChild = refDatabase.push().getKey();
-        refDatabase.child(keyIdChild).setValue(odborka);
-
-
-
-        //refDatabase = database.getReference("users/" + keyId + "/odborky")
-
 
         finish();
     }

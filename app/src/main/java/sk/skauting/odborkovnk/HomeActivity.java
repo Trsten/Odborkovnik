@@ -1,12 +1,15 @@
 package sk.skauting.odborkovnk;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -29,7 +32,6 @@ public class HomeActivity extends AppCompatActivity {
 
     private FirebaseDatabase database;
     private FirebaseAuth firebaseAuth;
-    private FirebaseAuth.AuthStateListener authStateListener;
     private DatabaseReference refDatabase;
     private String email;
 
@@ -37,17 +39,23 @@ public class HomeActivity extends AppCompatActivity {
     private TextView textViewSUnit;
     private TextView textViewSNickName;
     private TextView textViewEmail;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        toolbar = findViewById(R.id.RegToolbar);
+        setSupportActionBar(toolbar);
+
+        FloatingActionButton fab = findViewById(R.id.fabAddChallenge);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               createOdborka();
+                Intent listOfChallenges = new Intent(HomeActivity.this, ListOfChallenges.class);
+                listOfChallenges.putExtra("user",email);
+                startActivity(listOfChallenges);
             }
         });
 
@@ -83,8 +91,25 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
-    private void createOdborka() {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu,menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.logout) {
+            finish();
+        } else if(id == R.id.home) {
+            Toast.makeText(getApplicationContext(),"home", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.finished) {
+            Toast.makeText(getApplicationContext(),"finished", Toast.LENGTH_SHORT).show();
+        } else if(id == R.id.actual) {
+            Toast.makeText(getApplicationContext(),"actual", Toast.LENGTH_SHORT).show();
+        }
+        return true;
     }
 
 }

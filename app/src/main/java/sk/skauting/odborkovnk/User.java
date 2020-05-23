@@ -1,9 +1,5 @@
 package sk.skauting.odborkovnk;
 
-import java.util.ArrayList;
-
-import sk.skauting.odborkovnk.Odborka;
-
 public class User {
 
     private String email;

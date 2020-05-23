@@ -2,15 +2,15 @@ package sk.skauting.odborkovnk;
 
 import java.util.Map;
 
-public class Odborka {
+public class Challenge {
 
     private String title;
-    private Map<String,TaskForOdborka> taskForOdborky;
+    private Map<String, TaskChallenge> taskForOdborky;
 
-    public Odborka() {
+    public Challenge() {
     }
 
-    public Odborka(String title, Map<String,TaskForOdborka> taskForOdborky) {
+    public Challenge(String title, Map<String, TaskChallenge> taskForOdborky) {
         this.title = title;
         this.taskForOdborky = taskForOdborky;
     }
@@ -23,11 +23,11 @@ public class Odborka {
         this.title = title;
     }
 
-    public Map<String, TaskForOdborka> getTaskForOdborky() {
+    public Map<String, TaskChallenge> getTaskForOdborky() {
         return taskForOdborky;
     }
 
-    public void setTaskForOdborky(Map<String, TaskForOdborka> taskForOdborky) {
+    public void setTaskForOdborky(Map<String, TaskChallenge> taskForOdborky) {
         this.taskForOdborky = taskForOdborky;
     }
 }

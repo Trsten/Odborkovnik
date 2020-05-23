@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ProgressDialog progressDialog;
 
     private FirebaseAuth fireBaseAuth;
+    private FirebaseUser firebaseUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +67,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = fireBaseAuth.getCurrentUser();
+        if ( firebaseUser != null ) {
+            FirebaseUser currentUser = fireBaseAuth.getCurrentUser();
+            updateUI(currentUser);
+        }
     }
 
     private void loginUser() {
@@ -102,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 Toast.makeText(MainActivity.this, msg,Toast.LENGTH_SHORT).show();
                             }
                         }
-
                         progressDialog.cancel();
                     }
                 });

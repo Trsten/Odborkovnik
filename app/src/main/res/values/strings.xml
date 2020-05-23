@@ -20,4 +20,9 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="title_activity_test">test</string>
+    <string name="title_activity_asd">asd</string>
+    <string name="Logout">Logout</string>
+    <string name="Finished">Finished</string>
+    <string name="Actual">Actual</string>
+    <string name="Home">Home</string>
 </resources>
