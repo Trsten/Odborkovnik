@@ -11,9 +11,16 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
+
 import de.hdodenhof.circleimageview.CircleImageView;
+import sk.skauting.odborkovnk.View.RecycleViewChallengesAdapter;
+import sk.skauting.odborkovnk.View.RecycleViewTasksAdapter;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -26,6 +33,9 @@ public class DetailActivity extends AppCompatActivity {
 
     private TextView textViewTitle;
     private String title;
+
+    private ArrayList<Boolean> mCompleted;
+    private ArrayList<String> mTasks;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,13 +51,22 @@ public class DetailActivity extends AppCompatActivity {
         textViewTitle = (TextView) findViewById(R.id.txtDetailTitle);
         textViewTitle.setText(title);
 
+        mCompleted = new ArrayList<>();
+        boolean[] completed = intent.getBooleanArrayExtra("completed");
+        for ( int i = 0 ; i < completed.length; i++ ) {
+            mCompleted.add(completed[i]);
+        }
+
+        mTasks = new ArrayList<>();
+        mTasks = intent.getStringArrayListExtra("task");
+
         img = (CircleImageView) findViewById(R.id.imgDetailChallenge);
         Glide.with(this)
                 .asBitmap()
                 .load(imgUrl)
                 .into(img);
 
-        toolbar = findViewById(R.id.RegToolbarDetail);
+        toolbar = findViewById(R.id.toolbarDetail);
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -57,8 +76,10 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
-
-
+        RecyclerView recyclerView = findViewById(R.id.recycleViewDetail);
+        RecycleViewTasksAdapter adapter = new RecycleViewTasksAdapter(this,mTasks,mCompleted);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
 }

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="16dp"
-    android:id="@+id/challengeList_layout"
+    android:id="@+id/taskList_layout"
     >
 
     <CheckBox
@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="Botanik jhavfajf hvajvfhaj aj vaj hdvajsd a vjdasg vaj va"
+        android:text="ds"
         android:textSize="20sp" />
 </LinearLayout>
 

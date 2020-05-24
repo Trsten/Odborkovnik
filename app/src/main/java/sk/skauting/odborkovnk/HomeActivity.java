@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -30,7 +29,7 @@ import java.util.Map;
 import sk.skauting.odborkovnk.Model.Challenge;
 import sk.skauting.odborkovnk.Model.ChallengeTask;
 import sk.skauting.odborkovnk.Model.User;
-import sk.skauting.odborkovnk.View.RecycleViewListChallengesAdapter;
+import sk.skauting.odborkovnk.View.RecycleViewChallengesAdapter;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -87,7 +86,7 @@ public class HomeActivity extends AppCompatActivity {
         loadChallenges();
 
         RecyclerView recyclerView = findViewById(R.id.recycleViewHome);
-        RecycleViewListChallengesAdapter adapter = new RecycleViewListChallengesAdapter(this,mImagesNames,mTitles,mNumbersOfTasks,mTasks);
+        RecycleViewChallengesAdapter adapter = new RecycleViewChallengesAdapter(this,mImagesNames,mTitles,mNumbersOfTasks,mTasks);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }

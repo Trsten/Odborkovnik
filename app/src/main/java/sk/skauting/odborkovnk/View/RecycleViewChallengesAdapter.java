@@ -8,23 +8,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.common.SignInButton;
 
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import sk.skauting.odborkovnk.DetailActivity;
-import sk.skauting.odborkovnk.HomeActivity;
 import sk.skauting.odborkovnk.Model.ChallengeTask;
 import sk.skauting.odborkovnk.R;
 
-public class RecycleViewListChallengesAdapter extends RecyclerView.Adapter<RecycleViewListChallengesAdapter.ViewHolder> {
+public class RecycleViewChallengesAdapter extends RecyclerView.Adapter<RecycleViewChallengesAdapter.ViewHolder> {
 
     private static final String TAG = "RecycleViewLCAdapter";
 
@@ -34,7 +31,7 @@ public class RecycleViewListChallengesAdapter extends RecyclerView.Adapter<Recyc
     private ArrayList<ArrayList<ChallengeTask>> mTasks = new ArrayList<>();
     private Context context;
 
-    public RecycleViewListChallengesAdapter(Context context,ArrayList<String> mImagesNames, ArrayList<String> mTitles, ArrayList<String> mNumbersOfTasks,ArrayList<ArrayList<ChallengeTask>>  mTasks ) {
+    public RecycleViewChallengesAdapter(Context context, ArrayList<String> mImagesNames, ArrayList<String> mTitles, ArrayList<String> mNumbersOfTasks, ArrayList<ArrayList<ChallengeTask>>  mTasks ) {
         this.mImagesNames = mImagesNames;
         this.mTitles = mTitles;
         this.mNumbersOfTasks = mNumbersOfTasks;
