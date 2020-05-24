@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.AuthResult;
@@ -25,6 +24,10 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import sk.skauting.odborkovnk.Model.Challenge;
+import sk.skauting.odborkovnk.Model.ChallengeTask;
+import sk.skauting.odborkovnk.Model.User;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener  {
 
@@ -45,8 +48,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     private static final String USER = "user";
     private User user;
-    private Map<String, TaskChallenge> ulohy;
-    private Challenge challenge;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +71,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         buttonRegister.setOnClickListener(this);
         textViewRegistered.setOnClickListener(this);
-
-        ulohy = new HashMap<>();
 
     }
 
@@ -112,7 +111,42 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         progressDialog.setMessage("Create account...");
         progressDialog.show();
 
-        user = new User(email,fullname,scoutNickname,scoutUnit,password);
+        String uloha = "Počas jednej sezóny som šiel aspoň 10-krát na hubačku.";
+        String uloha2 = "Družine som vysvetlil rozdiel medzi nejedlými a jedovatými hubami.";
+
+        String uloha3 = "Zostavil som malý herbár z nižších (machy) a vyšších rastlín (byliny a dreviny).";
+        String uloha4 = "Viem pracovať s rôznymi druhmi atlasov a kľúčov na určovanie rastlín.";
+
+        ChallengeTask tas = new ChallengeTask("false",uloha);
+        ChallengeTask tas2 = new ChallengeTask("false",uloha2);
+
+        ChallengeTask tas3 = new ChallengeTask("false",uloha3);
+        ChallengeTask tas4 = new ChallengeTask("false",uloha4);
+
+        Map<String,ChallengeTask> tasks = new HashMap<>();
+        Map<String,ChallengeTask> tasks2 = new HashMap<>();
+
+        String key = refDatabase.push().getKey();
+
+        tasks.put(key,tas);
+        key = refDatabase.push().getKey();
+        tasks.put(key,tas2);
+        key = refDatabase.push().getKey();
+        tasks2.put(key,tas4);
+        key = refDatabase.push().getKey();
+        tasks2.put(key,tas3);
+
+        Challenge ch = new Challenge("Botanik","Botanik je odborka o pestovani odborie","gs://odborkovnik.appspot.com/Botanik.png",tasks);
+        Challenge ch1 = new Challenge("Hubar","Hubar je odborka o hubach a znalostiach","https://firebasestorage.googleapis.com/v0/b/odborkovnik.appspot.com/o/Hubar.png?alt=media&token=531c4d96-951d-4453-9015-1abc734a6a60",tasks2);
+
+        Map<String,Challenge> challenges = new HashMap<>();
+
+        key = refDatabase.push().getKey();
+        challenges.put(key,ch);
+        key = refDatabase.push().getKey();
+        challenges.put(key,ch1);
+
+        user = new User(email,fullname,scoutNickname,password,scoutUnit,challenges);
 
         fireBaseAuth.createUserWithEmailAndPassword(email,password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -135,7 +169,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                         }
                     }
                 });
-
     }
     @Override
     public void onClick(View v) {
