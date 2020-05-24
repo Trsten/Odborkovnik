@@ -1,6 +1,7 @@
 package sk.skauting.odborkovnk.View;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,10 +14,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.common.SignInButton;
 
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import sk.skauting.odborkovnk.DetailActivity;
+import sk.skauting.odborkovnk.HomeActivity;
+import sk.skauting.odborkovnk.Model.ChallengeTask;
 import sk.skauting.odborkovnk.R;
 
 public class RecycleViewListChallengesAdapter extends RecyclerView.Adapter<RecycleViewListChallengesAdapter.ViewHolder> {
@@ -26,12 +31,14 @@ public class RecycleViewListChallengesAdapter extends RecyclerView.Adapter<Recyc
     private ArrayList<String> mImagesNames = new ArrayList<>();
     private ArrayList<String> mTitles = new ArrayList<>();
     private ArrayList<String> mNumbersOfTasks = new ArrayList<>();
+    private ArrayList<ArrayList<ChallengeTask>> mTasks = new ArrayList<>();
     private Context context;
 
-    public RecycleViewListChallengesAdapter(Context context,ArrayList<String> mImagesNames, ArrayList<String> mTitles, ArrayList<String> mNumbersOfTasks ) {
+    public RecycleViewListChallengesAdapter(Context context,ArrayList<String> mImagesNames, ArrayList<String> mTitles, ArrayList<String> mNumbersOfTasks,ArrayList<ArrayList<ChallengeTask>>  mTasks ) {
         this.mImagesNames = mImagesNames;
         this.mTitles = mTitles;
         this.mNumbersOfTasks = mNumbersOfTasks;
+        this.mTasks = mTasks;
         this.context = context;
     }
 
@@ -44,7 +51,7 @@ public class RecycleViewListChallengesAdapter extends RecyclerView.Adapter<Recyc
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         Log.d(TAG,"onBindViewHolder : called.");
         Glide.with(context)
                 .asBitmap()
@@ -53,11 +60,26 @@ public class RecycleViewListChallengesAdapter extends RecyclerView.Adapter<Recyc
         holder.title.setText(mTitles.get(position));
         holder.numberOfTasks.setText(mNumbersOfTasks.get(position));
 
-        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d(TAG,"onClick clicked on:" + mTitles.get(position));
-                Toast.makeText(context, mTitles.get(position), Toast.LENGTH_SHORT).show();
+                ArrayList<ChallengeTask> arrayList = mTasks.get(position);
+
+                ArrayList<String> tasks = new ArrayList<>();
+                boolean[] completed = new boolean[arrayList.size()];
+                int i =0;
+                for ( ChallengeTask tsk : arrayList ) {
+                    tasks.add(tsk.getTask());
+                    completed[i] = tsk.getComplete().equals("true");
+                    i++;
+                }
+                Intent detailActivity = new Intent(context, DetailActivity.class);
+                detailActivity.putStringArrayListExtra("task",tasks);
+                detailActivity.putExtra("completed",completed);
+                detailActivity.putExtra("imgUrl",mImagesNames.get(position));
+                detailActivity.putExtra("title", mTitles.get(position));
+                context.startActivity(detailActivity);
             }
         });
     }

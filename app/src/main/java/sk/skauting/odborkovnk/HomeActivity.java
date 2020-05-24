@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import sk.skauting.odborkovnk.Model.Challenge;
+import sk.skauting.odborkovnk.Model.ChallengeTask;
 import sk.skauting.odborkovnk.Model.User;
 import sk.skauting.odborkovnk.View.RecycleViewListChallengesAdapter;
 
@@ -36,8 +37,6 @@ public class HomeActivity extends AppCompatActivity {
     private static final String TAG = "HomeActivity";
 
     private String email;
-
-    private RecyclerView mRecyclerChallenges;
 
     private Toolbar toolbar;
 
@@ -53,6 +52,7 @@ public class HomeActivity extends AppCompatActivity {
     private ArrayList<String> mImagesNames = new ArrayList<>();
     private ArrayList<String> mTitles = new ArrayList<>();
     private ArrayList<String> mNumbersOfTasks = new ArrayList<>();
+    private ArrayList<ArrayList<ChallengeTask>> mTasks = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +62,6 @@ public class HomeActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.RegToolbar);
         setSupportActionBar(toolbar);
         progressBar = findViewById(R.id. loadingDatapb);
-
-        mRecyclerChallenges = (RecyclerView) findViewById(R.id.recycleViewHome);
 
         FloatingActionButton fab = findViewById(R.id.fabAddChallenge);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -86,33 +84,12 @@ public class HomeActivity extends AppCompatActivity {
 
         progressBar.setVisibility(View.VISIBLE);
 
-        refDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for ( DataSnapshot ds : dataSnapshot.getChildren() ) {
-                    User user = ds.getValue(User.class);
-                    if ( user.getEmail().equals(email) ) {
-                        Map<String,Challenge> challenges = user.getChallenges();
-                        for ( Map.Entry<String,Challenge> challenge : challenges.entrySet() ) {
-                            mImagesNames.add(challenge.getValue().getImgFileName());
-                            mTitles.add(challenge.getValue().getTitle());
-                            mNumbersOfTasks.add( setTaskText(challenge.getValue()));
-                        }
+        loadChallenges();
 
-                        RecyclerView recyclerView = findViewById(R.id.recycleViewHome);
-                        RecycleViewListChallengesAdapter adapter = new RecycleViewListChallengesAdapter(HomeActivity.this,mImagesNames,mTitles,mNumbersOfTasks);
-                        recyclerView.setAdapter(adapter);
-                        recyclerView.setLayoutManager(new LinearLayoutManager(HomeActivity.this));
-                    }
-                }
-                progressBar.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        RecyclerView recyclerView = findViewById(R.id.recycleViewHome);
+        RecycleViewListChallengesAdapter adapter = new RecycleViewListChallengesAdapter(this,mImagesNames,mTitles,mNumbersOfTasks,mTasks);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
         @Override
@@ -138,10 +115,43 @@ public class HomeActivity extends AppCompatActivity {
 
         private String setTaskText(Challenge challenge) {
             if ( challenge.ngetNumerOfTask() != challenge.numberOfCompleted() ) {
-                return "completed " + String.valueOf(challenge.ngetNumerOfTask()) +
-                        "/" + String.valueOf(challenge.numberOfCompleted());
+                return "completed " +  String.valueOf(challenge.numberOfCompleted()) +
+                        "/" + String.valueOf(challenge.ngetNumerOfTask());
             } else {
                 return "successfully completed";
             }
+        }
+
+        private void loadChallenges() {
+            refDatabase.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                        User user = ds.getValue(User.class);
+                        if (user.getEmail().equals(email)) {
+
+                            Map<String, Challenge> challenges = user.getChallenges();
+                            for (Map.Entry<String, Challenge> challenge : challenges.entrySet()) {
+                                mImagesNames.add(challenge.getValue().getImgFileName());
+                                mTitles.add(challenge.getValue().getTitle());
+                                mNumbersOfTasks.add(setTaskText(challenge.getValue()));
+
+                                ArrayList<ChallengeTask> mArray = new ArrayList<>();
+                                Map<String, ChallengeTask> tasks = challenge.getValue().getTasks();
+                                for (Map.Entry<String, ChallengeTask> task : tasks.entrySet()) {
+                                    mArray.add(task.getValue());
+                                }
+                            mTasks.add(0,mArray);
+                            }
+                        }
+                        progressBar.setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
         }
 }
