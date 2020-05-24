@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="120dp"
             android:text="Botanik"
-            android:textSize="40sp" />
+            android:textSize="30sp" />
 
         <TextView
             android:id="@+id/numberOfTaskChListItem"
@@ -29,8 +29,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="120dp"
             android:text="task"
-            android:textSize="30sp"
-            android:layout_marginTop="60dp"
+            android:textSize="20sp"
+            android:layout_marginTop="50dp"
             />
 
 

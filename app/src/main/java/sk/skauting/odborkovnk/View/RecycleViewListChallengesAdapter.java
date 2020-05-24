@@ -53,13 +53,13 @@ public class RecycleViewListChallengesAdapter extends RecyclerView.Adapter<Recyc
         holder.title.setText(mTitles.get(position));
         holder.numberOfTasks.setText(mNumbersOfTasks.get(position));
 
-//        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.d(TAG,"onClick clicked on:" + mTitles.get(position));
-//                Toast.makeText(context, mTitles.get(position), Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        holder.parentLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG,"onClick clicked on:" + mTitles.get(position));
+                Toast.makeText(context, mTitles.get(position), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

@@ -84,7 +84,7 @@ public class HomeActivity extends AppCompatActivity {
         FirebaseUser user = firebaseAuth.getCurrentUser();
         userID = user.getUid();
 
-        progressBar.
+        progressBar.setVisibility(View.VISIBLE);
 
         refDatabase.addValueEventListener(new ValueEventListener() {
             @Override
@@ -96,9 +96,7 @@ public class HomeActivity extends AppCompatActivity {
                         for ( Map.Entry<String,Challenge> challenge : challenges.entrySet() ) {
                             mImagesNames.add(challenge.getValue().getImgFileName());
                             mTitles.add(challenge.getValue().getTitle());
-                            String total = String.valueOf(challenge.getValue().ngetNumerOfTask());
-                            String completed = String.valueOf(challenge.getValue().numberOfCompleted());
-                            mNumbersOfTasks.add( "completed  " + completed + "/" + total);
+                            mNumbersOfTasks.add( setTaskText(challenge.getValue()));
                         }
 
                         RecyclerView recyclerView = findViewById(R.id.recycleViewHome);
@@ -107,6 +105,7 @@ public class HomeActivity extends AppCompatActivity {
                         recyclerView.setLayoutManager(new LinearLayoutManager(HomeActivity.this));
                     }
                 }
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override
@@ -137,6 +136,12 @@ public class HomeActivity extends AppCompatActivity {
             return true;
         }
 
-
-
+        private String setTaskText(Challenge challenge) {
+            if ( challenge.ngetNumerOfTask() != challenge.numberOfCompleted() ) {
+                return "completed " + String.valueOf(challenge.ngetNumerOfTask()) +
+                        "/" + String.valueOf(challenge.numberOfCompleted());
+            } else {
+                return "successfully completed";
+            }
+        }
 }
