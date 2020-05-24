@@ -15,6 +15,7 @@
             android:name=".ChallengeActivity"
             android:parentActivityName=".HomeActivity" />
         <activity android:name=".HomeActivity" />
+        <activity android:name=".DetailActivity"/>
         <activity android:name=".RegisterActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

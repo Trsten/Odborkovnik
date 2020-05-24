@@ -6,16 +6,16 @@ public class Challenge {
 
     private String title;
     private String notes;
-    private String ImgUrl;
+    private String imgFileName;
     private Map<String, ChallengeTask> tasks;
 
     public Challenge() {
     }
 
-    public Challenge(String title, String notes, String imgUrl, Map<String, ChallengeTask> tasks) {
+    public Challenge(String title, String notes, String imgFileName, Map<String, ChallengeTask> tasks) {
         this.title = title;
         this.notes = notes;
-        ImgUrl = imgUrl;
+        this.imgFileName = imgFileName;
         this.tasks = tasks;
     }
 
@@ -47,11 +47,21 @@ public class Challenge {
         return this.tasks.size();
     }
 
-    public String getImgUrl() {
-        return ImgUrl;
+    public String getImgFileName() {
+        return imgFileName;
     }
 
-    public void setImgUrl(String imgUrl) {
-        ImgUrl = imgUrl;
+    public void setImgFileName(String imgFileName) {
+        this.imgFileName = imgFileName;
+    }
+
+    public int numberOfCompleted() {
+        int completed = 0;
+        for (Map.Entry<String, ChallengeTask> task : this.tasks.entrySet()) {
+            if (task.getValue().getComplete().equals("true")) {
+                completed++;
+            }
+        }
+        return completed;
     }
 }

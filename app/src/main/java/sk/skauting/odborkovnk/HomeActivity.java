@@ -3,6 +3,7 @@ package sk.skauting.odborkovnk;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -22,9 +24,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Map;
+
+import sk.skauting.odborkovnk.Model.Challenge;
 import sk.skauting.odborkovnk.Model.User;
+import sk.skauting.odborkovnk.View.RecycleViewListChallengesAdapter;
 
 public class HomeActivity extends AppCompatActivity {
+
+    private static final String TAG = "HomeActivity";
 
     private String email;
 
@@ -39,7 +48,11 @@ public class HomeActivity extends AppCompatActivity {
 
     private String userID;
 
-    private ListView mLiestWiev;
+    private ProgressBar progressBar;
+
+    private ArrayList<String> mImagesNames = new ArrayList<>();
+    private ArrayList<String> mTitles = new ArrayList<>();
+    private ArrayList<String> mNumbersOfTasks = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +61,7 @@ public class HomeActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.RegToolbar);
         setSupportActionBar(toolbar);
+        progressBar = findViewById(R.id. loadingDatapb);
 
         mRecyclerChallenges = (RecyclerView) findViewById(R.id.recycleViewHome);
 
@@ -70,13 +84,27 @@ public class HomeActivity extends AppCompatActivity {
         FirebaseUser user = firebaseAuth.getCurrentUser();
         userID = user.getUid();
 
+        progressBar.
+
         refDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for ( DataSnapshot ds : dataSnapshot.getChildren() ) {
                     User user = ds.getValue(User.class);
                     if ( user.getEmail().equals(email) ) {
-                        String str = user.getEmail();
+                        Map<String,Challenge> challenges = user.getChallenges();
+                        for ( Map.Entry<String,Challenge> challenge : challenges.entrySet() ) {
+                            mImagesNames.add(challenge.getValue().getImgFileName());
+                            mTitles.add(challenge.getValue().getTitle());
+                            String total = String.valueOf(challenge.getValue().ngetNumerOfTask());
+                            String completed = String.valueOf(challenge.getValue().numberOfCompleted());
+                            mNumbersOfTasks.add( "completed  " + completed + "/" + total);
+                        }
+
+                        RecyclerView recyclerView = findViewById(R.id.recycleViewHome);
+                        RecycleViewListChallengesAdapter adapter = new RecycleViewListChallengesAdapter(HomeActivity.this,mImagesNames,mTitles,mNumbersOfTasks);
+                        recyclerView.setAdapter(adapter);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(HomeActivity.this));
                     }
                 }
             }
