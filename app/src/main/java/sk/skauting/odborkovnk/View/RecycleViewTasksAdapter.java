@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sk.skauting.odborkovnk.R;
+import sk.skauting.odborkovnk.RegisterActivity;
 
 public class RecycleViewTasksAdapter extends RecyclerView.Adapter<RecycleViewTasksAdapter.ViewHolder> {
 
@@ -31,6 +33,10 @@ public class RecycleViewTasksAdapter extends RecyclerView.Adapter<RecycleViewTas
         this.mContext = mContext;
     }
 
+    public ArrayList<Boolean> getStateOfComplete() {
+        return mCompleted;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -40,10 +46,18 @@ public class RecycleViewTasksAdapter extends RecyclerView.Adapter<RecycleViewTas
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         Log.d(TAG,"onBindViewHolder : called");
         holder.completed.setChecked(mCompleted.get(position));
         holder.task.setText(mTasks.get(position));
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.completed.toggle();
+                mCompleted.set(position,holder.completed.isChecked());
+            }
+        });
     }
 
     @Override
@@ -64,4 +78,5 @@ public class RecycleViewTasksAdapter extends RecyclerView.Adapter<RecycleViewTas
             completed = itemView.findViewById(R.id.completedDetail);
         }
     }
+
 }

@@ -1,5 +1,8 @@
 package sk.skauting.odborkovnk.Model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ChallengeTask {
 
     private String complete;
@@ -27,5 +30,12 @@ public class ChallengeTask {
 
     public void setTask(String task) {
         this.task = task;
+    }
+
+    public Map<String,Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("complete", this.complete);
+        result.put("task", this.task);
+        return result;
     }
 }

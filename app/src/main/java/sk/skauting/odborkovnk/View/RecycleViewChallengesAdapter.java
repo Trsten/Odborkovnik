@@ -1,5 +1,6 @@
 package sk.skauting.odborkovnk.View;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -10,11 +11,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import sk.skauting.odborkovnk.DetailActivity;
@@ -29,14 +32,29 @@ public class RecycleViewChallengesAdapter extends RecyclerView.Adapter<RecycleVi
     private ArrayList<String> mTitles = new ArrayList<>();
     private ArrayList<String> mNumbersOfTasks = new ArrayList<>();
     private ArrayList<ArrayList<ChallengeTask>> mTasks = new ArrayList<>();
+    private ArrayList<ArrayList<String>> mTaskPath = new ArrayList<>();
+    private ArrayList<String> mChallengePath = new ArrayList<>();
     private Context context;
 
-    public RecycleViewChallengesAdapter(Context context, ArrayList<String> mImagesNames, ArrayList<String> mTitles, ArrayList<String> mNumbersOfTasks, ArrayList<ArrayList<ChallengeTask>>  mTasks ) {
+    public RecycleViewChallengesAdapter(Context context, ArrayList<String> mImagesNames, ArrayList<String> mTitles,ArrayList<String> mNumbersOfTasks,
+                                        ArrayList<ArrayList<ChallengeTask>>  mTasks,ArrayList<String> mChallengePath,ArrayList<ArrayList<String>> mTaskPath ) {
         this.mImagesNames = mImagesNames;
         this.mTitles = mTitles;
         this.mNumbersOfTasks = mNumbersOfTasks;
         this.mTasks = mTasks;
         this.context = context;
+        this.mChallengePath = mChallengePath;
+        this.mTaskPath = mTaskPath;
+    }
+
+    public void update(List<String> newList)
+    {
+        MyDiffUtilCallBack diffUtilCallBack = new MyDiffUtilCallBack(this.mNumbersOfTasks,newList);
+        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffUtilCallBack);
+
+        this.mNumbersOfTasks.clear();
+        this.mNumbersOfTasks.addAll(newList);
+        diffResult.dispatchUpdatesTo(this);
     }
 
     @NonNull
@@ -72,11 +90,16 @@ public class RecycleViewChallengesAdapter extends RecyclerView.Adapter<RecycleVi
                     i++;
                 }
                 Intent detailActivity = new Intent(context, DetailActivity.class);
+                detailActivity.putExtra("position", position);
                 detailActivity.putStringArrayListExtra("task",tasks);
+                detailActivity.putStringArrayListExtra("taskPath",mTaskPath.get(position));
+                detailActivity.putExtra("path",mChallengePath.get(position));
                 detailActivity.putExtra("completed",completed);
                 detailActivity.putExtra("imgUrl",mImagesNames.get(position));
                 detailActivity.putExtra("title", mTitles.get(position));
-                context.startActivity(detailActivity);
+                if (context instanceof Activity) {
+                    ((Activity) context  ).startActivityForResult(detailActivity,1);
+                }
             }
         });
     }

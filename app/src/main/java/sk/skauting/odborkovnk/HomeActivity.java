@@ -1,6 +1,7 @@
 package sk.skauting.odborkovnk;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -8,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +26,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import sk.skauting.odborkovnk.Model.Challenge;
@@ -52,6 +55,11 @@ public class HomeActivity extends AppCompatActivity {
     private ArrayList<String> mTitles = new ArrayList<>();
     private ArrayList<String> mNumbersOfTasks = new ArrayList<>();
     private ArrayList<ArrayList<ChallengeTask>> mTasks = new ArrayList<>();
+    private ArrayList<String> mChallengePath = new ArrayList<>();
+    private ArrayList<ArrayList<String>> mTaskPath = new ArrayList<>();
+    private String mPath;
+
+    private RecycleViewChallengesAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +80,9 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        mPath = "users/";
+        mChallengePath = new ArrayList<>();
+
         Intent intent = getIntent();
         email = intent.getStringExtra("email");
 
@@ -86,7 +97,7 @@ public class HomeActivity extends AppCompatActivity {
         loadChallenges();
 
         RecyclerView recyclerView = findViewById(R.id.recycleViewHome);
-        RecycleViewChallengesAdapter adapter = new RecycleViewChallengesAdapter(this,mImagesNames,mTitles,mNumbersOfTasks,mTasks);
+        adapter = new RecycleViewChallengesAdapter(this,mImagesNames,mTitles,mNumbersOfTasks,mTasks,mChallengePath,mTaskPath);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
@@ -128,19 +139,25 @@ public class HomeActivity extends AppCompatActivity {
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
                         User user = ds.getValue(User.class);
                         if (user.getEmail().equals(email)) {
+                            mPath += ds.getKey();
 
                             Map<String, Challenge> challenges = user.getChallenges();
                             for (Map.Entry<String, Challenge> challenge : challenges.entrySet()) {
-                                mImagesNames.add(challenge.getValue().getImgFileName());
+                                mImagesNames.add(challenge.getValue().getImageUrl());
                                 mTitles.add(challenge.getValue().getTitle());
                                 mNumbersOfTasks.add(setTaskText(challenge.getValue()));
+                                mChallengePath.add(mPath + "/challenges/" + challenge.getKey());
 
                                 ArrayList<ChallengeTask> mArray = new ArrayList<>();
+                                ArrayList<String> mArKey = new ArrayList<>();
                                 Map<String, ChallengeTask> tasks = challenge.getValue().getTasks();
                                 for (Map.Entry<String, ChallengeTask> task : tasks.entrySet()) {
+
                                     mArray.add(task.getValue());
+                                    mArKey.add(task.getKey());
                                 }
                             mTasks.add(0,mArray);
+                            mTaskPath.add(mArKey);
                             }
                         }
                         progressBar.setVisibility(View.GONE);
@@ -152,5 +169,41 @@ public class HomeActivity extends AppCompatActivity {
 
                 }
             });
+            Log.d(TAG,"prekreslujem : onCreate");
         }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        ArrayList<Boolean> newCompleted = new ArrayList<>();
+        if ( requestCode == 1 ) {
+            if ( resultCode == RESULT_OK ) {
+                boolean[] completed = data.getBooleanArrayExtra("result");
+                for ( int i = 0 ; i < completed.length; i++ ) {
+                    newCompleted.add(completed[i]);
+
+                    int position = data.getIntExtra("position",0);
+                    ArrayList<ChallengeTask> tsks = mTasks.get(position);
+                    int complete = 0;
+                    int j = 0;
+                    for ( ChallengeTask task : tsks ) {
+                        task.setComplete(newCompleted.get(j) ? "true" : "false");
+                        complete += newCompleted.get(j) ? 1 : 0;
+                        j++;
+                    }
+
+                    mTasks.set(position,tsks);
+                    String text = "complete/" + j;
+
+                    Log.d(TAG," patko :" + text );
+
+                    mNumbersOfTasks.set(position, text);
+                    adapter.update(mNumbersOfTasks);
+                }
+
+                }
+            }
+
+
+    }
 }

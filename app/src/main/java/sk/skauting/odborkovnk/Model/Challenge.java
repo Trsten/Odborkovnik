@@ -1,21 +1,22 @@
 package sk.skauting.odborkovnk.Model;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class Challenge {
 
     private String title;
     private String notes;
-    private String imgFileName;
+    private String imageUrl;
     private Map<String, ChallengeTask> tasks;
 
     public Challenge() {
     }
 
-    public Challenge(String title, String notes, String imgFileName, Map<String, ChallengeTask> tasks) {
+    public Challenge(String title, String notes, String imageUrl, Map<String, ChallengeTask> tasks) {
         this.title = title;
         this.notes = notes;
-        this.imgFileName = imgFileName;
+        this.imageUrl = imageUrl;
         this.tasks = tasks;
     }
 
@@ -47,12 +48,12 @@ public class Challenge {
         return this.tasks.size();
     }
 
-    public String getImgFileName() {
-        return imgFileName;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImgFileName(String imgFileName) {
-        this.imgFileName = imgFileName;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public int numberOfCompleted() {
@@ -64,4 +65,5 @@ public class Challenge {
         }
         return completed;
     }
+
 }

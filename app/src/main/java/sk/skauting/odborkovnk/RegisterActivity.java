@@ -136,8 +136,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         key = refDatabase.push().getKey();
         tasks2.put(key,tas3);
 
-        Challenge ch = new Challenge("Botanik","Botanik je odborka o pestovani odborie","Botanik.png",tasks);
-        Challenge ch1 = new Challenge("Hubar","Hubar je odborka o hubach a znalostiach","Hubar.png",tasks2);
+        Challenge ch = new Challenge("Botanik","Botanik je odborka o pestovani odborie","https://firebasestorage.googleapis.com/v0/b/odborkovnik.appspot.com/o/Botanik.png?alt=media&token=502466ef-4e88-4f9d-b86d-7e601432af0c",tasks);
+        Challenge ch1 = new Challenge("Hubar","Hubar je odborka o hubach a znalostiach","https://firebasestorage.googleapis.com/v0/b/odborkovnik.appspot.com/o/Hubar.png?alt=media&token=531c4d96-951d-4453-9015-1abc734a6a60",tasks2);
 
         Map<String,Challenge> challenges = new HashMap<>();
 
