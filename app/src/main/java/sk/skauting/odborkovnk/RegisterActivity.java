@@ -108,46 +108,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             return;
         }
 
-        progressDialog.setMessage("Create account...");
-        progressDialog.show();
-
-        String uloha = "Počas jednej sezóny som šiel aspoň 10-krát na hubačku.";
-        String uloha2 = "Družine som vysvetlil rozdiel medzi nejedlými a jedovatými hubami.";
-
-        String uloha3 = "Zostavil som malý herbár z nižších (machy) a vyšších rastlín (byliny a dreviny).";
-        String uloha4 = "Viem pracovať s rôznymi druhmi atlasov a kľúčov na určovanie rastlín.";
-
-        ChallengeTask tas = new ChallengeTask("false",uloha);
-        ChallengeTask tas2 = new ChallengeTask("false",uloha2);
-
-        ChallengeTask tas3 = new ChallengeTask("false",uloha3);
-        ChallengeTask tas4 = new ChallengeTask("false",uloha4);
-
-        Map<String,ChallengeTask> tasks = new HashMap<>();
-        Map<String,ChallengeTask> tasks2 = new HashMap<>();
-
-        String key = refDatabase.push().getKey();
-
-        tasks.put(key,tas);
-        key = refDatabase.push().getKey();
-        tasks.put(key,tas2);
-        key = refDatabase.push().getKey();
-        tasks2.put(key,tas4);
-        key = refDatabase.push().getKey();
-        tasks2.put(key,tas3);
-
-        Challenge ch = new Challenge("Botanik","Botanik je odborka o pestovani odborie","https://firebasestorage.googleapis.com/v0/b/odborkovnik.appspot.com/o/Botanik.png?alt=media&token=502466ef-4e88-4f9d-b86d-7e601432af0c",tasks);
-        Challenge ch1 = new Challenge("Hubar","Hubar je odborka o hubach a znalostiach","https://firebasestorage.googleapis.com/v0/b/odborkovnik.appspot.com/o/Hubar.png?alt=media&token=531c4d96-951d-4453-9015-1abc734a6a60",tasks2);
-
-        Map<String,Challenge> challenges = new HashMap<>();
-
-        key = refDatabase.push().getKey();
-        challenges.put(key,ch);
-        key = refDatabase.push().getKey();
-        challenges.put(key,ch1);
-
-        user = new User(email,fullname,scoutNickname,password,scoutUnit,challenges);
-
         fireBaseAuth.createUserWithEmailAndPassword(email,password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
