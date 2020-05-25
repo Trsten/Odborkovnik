@@ -1,11 +1,13 @@
 package sk.skauting.odborkovnk;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -105,6 +107,26 @@ public class ChallengeActivity extends AppCompatActivity {
                 Log.d(TAG, "prekreslujem : onCreate");
             }
         });
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if ( requestCode == 1 ) {
+            if ( resultCode == RESULT_OK ) {
+                if ( data != null) {
+                    String key = data.getStringExtra("keyChallenge");
+                    Intent intent = new Intent();
+                    intent.putExtra("keyChallenge",key);
+
+                    setResult(RESULT_OK,intent);
+
+                    finish();
+                }
+            }
+        }
 
     }
 }

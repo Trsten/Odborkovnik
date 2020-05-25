@@ -37,9 +37,6 @@ public class InfoChallengeActivity extends AppCompatActivity {
     private String title;
     private ArrayList<String> mTasks;
 
-    private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference refDatabase;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,8 +77,12 @@ public class InfoChallengeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                finish();
+                Intent resultIntend = new Intent();
+                String key = resultIntend.getStringExtra("key");
+                resultIntend.putExtra("keyChallenge", key);
+                setResult(RESULT_OK,resultIntend);
 
+                finish();
                 }
         });
 

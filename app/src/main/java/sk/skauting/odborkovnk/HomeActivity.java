@@ -76,7 +76,6 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent listOfChallenges = new Intent(HomeActivity.this, ChallengeActivity.class);
-                listOfChallenges.putExtra("user", mPath);
                 startActivityForResult(listOfChallenges,2);
             }
         });
@@ -226,8 +225,13 @@ public class HomeActivity extends AppCompatActivity {
                     adapter.update(newNumbersOfTasks);
                 }
             }
+        } else if ( requestCode == 2) {
+            if ( resultCode == RESULT_OK ) {
+                Intent intent = new Intent();
+
+            }
         }
-        //TODO: počuvam na requestCode 2 aby som insertol novu challenge
+
     }
 
 }
