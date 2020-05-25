@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -51,6 +51,7 @@ public class HomeActivity extends AppCompatActivity {
     private String userID;
 
     private ProgressBar progressBar;
+    private TextView infoNoData;
 
     private ArrayList<String> mImagesNames = new ArrayList<>();
     private ArrayList<String> mTitles = new ArrayList<>();
@@ -80,6 +81,9 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        infoNoData = (TextView) findViewById(R.id.textViewNoData);
+        infoNoData.setVisibility(View.VISIBLE);
+
         mPath = "users/";
         mChallengePath = new ArrayList<>();
 
@@ -96,10 +100,10 @@ public class HomeActivity extends AppCompatActivity {
 
         loadChallenges();
 
-        final RecyclerView recyclerView = findViewById(R.id.recycleViewHome);
-        adapter = new RecycleViewChallengesAdapter(this,mImagesNames,mTitles,mNumbersOfTasks,mTasks,mChallengePath,mTaskPath);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            final RecyclerView recyclerView = findViewById(R.id.recycleViewHome);
+            adapter = new RecycleViewChallengesAdapter(this,mImagesNames,mTitles,mNumbersOfTasks,mTasks,mChallengePath,mTaskPath);
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
@@ -117,7 +121,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
         helper.attachToRecyclerView(recyclerView);
-    }
+        }
 
         @Override
         public boolean onCreateOptionsMenu (Menu menu) {
@@ -165,23 +169,28 @@ public class HomeActivity extends AppCompatActivity {
                         if (user.getEmail().equals(email)) {
                             mPath += ds.getKey();
                             Map<String, Challenge> challenges = user.getChallenges();
-                            for (Map.Entry<String, Challenge> challenge : challenges.entrySet()) {
-                                mImagesNames.add(challenge.getValue().getImageUrl());
-                                mTitles.add(challenge.getValue().getTitle());
-                                mNumbersOfTasks.add(setTaskText(challenge.getValue()));
-                                mChallengePath.add(mPath + "/challenges/" + challenge.getKey());
+                            if (challenges != null ) {
+                                infoNoData.setVisibility(View.GONE);
+                                for (Map.Entry<String, Challenge> challenge : challenges.entrySet()) {
+                                    mImagesNames.add(challenge.getValue().getImageUrl());
+                                    mTitles.add(challenge.getValue().getTitle());
+                                    mNumbersOfTasks.add(setTaskText(challenge.getValue()));
+                                    mChallengePath.add(mPath + "/challenges/" + challenge.getKey());
 
-                                ArrayList<ChallengeTask> mArray = new ArrayList<>();
-                                ArrayList<String> mArKey = new ArrayList<>();
-                                Map<String, ChallengeTask> tasks = challenge.getValue().getTasks();
-                                for (Map.Entry<String, ChallengeTask> task : tasks.entrySet()) {
+                                    ArrayList<ChallengeTask> mArray = new ArrayList<>();
+                                    ArrayList<String> mArKey = new ArrayList<>();
+                                    Map<String, ChallengeTask> tasks = challenge.getValue().getTasks();
+                                    for (Map.Entry<String, ChallengeTask> task : tasks.entrySet()) {
 
-                                    mArray.add(task.getValue());
-                                    mArKey.add(task.getKey());
+                                        mArray.add(task.getValue());
+                                        mArKey.add(task.getKey());
+                                    }
+                                    mTasks.add(mArray);
+                                    mTaskPath.add(mArKey);
                                 }
-                            mTasks.add(mArray);
-                            mTaskPath.add(mArKey);
                             }
+                        } else {
+                            infoNoData.setVisibility(View.VISIBLE);
                         }
                         progressBar.setVisibility(View.GONE);
                     }
@@ -194,7 +203,6 @@ public class HomeActivity extends AppCompatActivity {
             });
             Log.d(TAG,"prekreslujem : onCreate");
         }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -243,7 +251,6 @@ public class HomeActivity extends AppCompatActivity {
                                 adapter.notifyDataSetChanged();
                             }
                         }
-
                     }
 
                     @Override
