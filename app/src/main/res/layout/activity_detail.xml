@@ -16,20 +16,21 @@
         app:title="Detail Challenge"
         app:titleMarginStart="10dp" />
 
+
     <LinearLayout
         android:id="@+id/layoutDetail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
         android:orientation="horizontal"
+        android:scrollbars="horizontal"
         app:layout_constraintTop_toBottomOf="@+id/toolbarDetail"
         >
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imgDetailChallenge"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="16dp"
             android:src="@mipmap/ic_launcher"
             android:layout_marginTop="16dp"/>
 
@@ -41,12 +42,11 @@
             android:layout_marginStart="16dp"
             android:gravity="center_vertical"
             android:text="Botanik"
-            android:textSize="40sp" />
+            android:textSize="30sp" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycleViewDetail"
-        android:layout_marginTop="16dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -55,7 +55,7 @@
         app:layout_constraintTop_toBottomOf="@+id/layoutDetail" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabSaveChanges"
+        android:id="@+id/fabAddChallenge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"

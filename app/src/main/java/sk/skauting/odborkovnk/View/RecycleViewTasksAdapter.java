@@ -33,6 +33,12 @@ public class RecycleViewTasksAdapter extends RecyclerView.Adapter<RecycleViewTas
         this.mContext = mContext;
     }
 
+    public RecycleViewTasksAdapter( Context mContext,ArrayList<String> mTasks) {
+        this.mTasks = mTasks;
+        this.mContext = mContext;
+        this.mCompleted = null;
+    }
+
     public ArrayList<Boolean> getStateOfComplete() {
         return mCompleted;
     }
@@ -48,16 +54,20 @@ public class RecycleViewTasksAdapter extends RecyclerView.Adapter<RecycleViewTas
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         Log.d(TAG,"onBindViewHolder : called");
-        holder.completed.setChecked(mCompleted.get(position));
         holder.task.setText(mTasks.get(position));
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                holder.completed.toggle();
-                mCompleted.set(position,holder.completed.isChecked());
-            }
-        });
+        if ( mCompleted != null ) {
+            holder.completed.setChecked(mCompleted.get(position));
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    holder.completed.toggle();
+                    mCompleted.set(position,holder.completed.isChecked());
+                }
+            });
+        } else {
+            holder.completed.setVisibility(View.GONE);
+        }
     }
 
     @Override

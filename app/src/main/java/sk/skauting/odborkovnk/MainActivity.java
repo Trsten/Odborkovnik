@@ -19,15 +19,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import sk.skauting.odborkovnk.Model.Challenge;
-import sk.skauting.odborkovnk.Model.ChallengeTask;
-import sk.skauting.odborkovnk.Model.User;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 

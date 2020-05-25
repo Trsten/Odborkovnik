@@ -47,6 +47,15 @@ public class RecycleViewChallengesAdapter extends RecyclerView.Adapter<RecycleVi
         this.mTaskPath = mTaskPath;
     }
 
+    public void remove(int position) {
+        mImagesNames.remove(position);
+        mTitles.remove(position);
+        mNumbersOfTasks.remove(position);
+        mTasks.remove(position);
+        mTaskPath.remove(position);
+        mChallengePath.remove(position);
+    }
+
     public void update(List<String> newList)
     {
         ChalDiffUtilCallBack diffUtilCallBack = new ChalDiffUtilCallBack(this.mNumbersOfTasks,newList);

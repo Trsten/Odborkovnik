@@ -4,9 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,7 +28,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import sk.skauting.odborkovnk.Model.Challenge;
@@ -75,8 +76,8 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent listOfChallenges = new Intent(HomeActivity.this, ChallengeActivity.class);
-                listOfChallenges.putExtra("user", email);
-                startActivity(listOfChallenges);
+                listOfChallenges.putExtra("user", mPath);
+                startActivityForResult(listOfChallenges,2);
             }
         });
 
@@ -96,10 +97,27 @@ public class HomeActivity extends AppCompatActivity {
 
         loadChallenges();
 
-        RecyclerView recyclerView = findViewById(R.id.recycleViewHome);
+        final RecyclerView recyclerView = findViewById(R.id.recycleViewHome);
         adapter = new RecycleViewChallengesAdapter(this,mImagesNames,mTitles,mNumbersOfTasks,mTasks,mChallengePath,mTaskPath);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getAdapterPosition();
+                refDatabase = firebaseDatabase.getReference(mChallengePath.get(position));
+                refDatabase.removeValue();
+                adapter.remove(position);
+                adapter.notifyDataSetChanged();
+            }
+        });
+        helper.attachToRecyclerView(recyclerView);
     }
 
         @Override
@@ -209,6 +227,7 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }
         }
+        //TODO: počuvam na requestCode 2 aby som insertol novu challenge
     }
 
 }
