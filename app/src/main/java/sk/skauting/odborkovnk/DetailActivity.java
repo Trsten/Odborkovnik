@@ -98,18 +98,17 @@ public class DetailActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean[] result = new boolean[mCompleted.size()];
+                boolean[] result = new boolean[adapter.getStateOfComplete().size()];
                 int i = 0;
-                for ( Boolean bl : mCompleted ) {
+                for ( Boolean bl : adapter.getStateOfComplete() ) {
                     result[i] = bl;
                     i++;
                 }
-
-                adapter.getStateOfComplete();
                 Intent resultIntend = new Intent();
                 resultIntend.putExtra("result",result);
                 resultIntend.putExtra("title",title);
-                resultIntend.putExtra("position",intent.getIntExtra("position",0));
+                int position = intent.getIntExtra("position",0);
+                resultIntend.putExtra("position",position);
 
                 setResult(RESULT_OK,resultIntend);
 

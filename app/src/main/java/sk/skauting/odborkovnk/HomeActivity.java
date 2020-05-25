@@ -136,11 +136,17 @@ public class HomeActivity extends AppCompatActivity {
             refDatabase.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    mImagesNames.clear();
+                    mTitles.clear();
+                    mNumbersOfTasks.clear();
+                    mChallengePath.clear();
+                    mTasks.clear();
+                    mTaskPath.clear();
+                    mPath = "users/";
                     for (DataSnapshot ds : dataSnapshot.getChildren()) {
                         User user = ds.getValue(User.class);
                         if (user.getEmail().equals(email)) {
                             mPath += ds.getKey();
-
                             Map<String, Challenge> challenges = user.getChallenges();
                             for (Map.Entry<String, Challenge> challenge : challenges.entrySet()) {
                                 mImagesNames.add(challenge.getValue().getImageUrl());
@@ -156,7 +162,7 @@ public class HomeActivity extends AppCompatActivity {
                                     mArray.add(task.getValue());
                                     mArKey.add(task.getKey());
                                 }
-                            mTasks.add(0,mArray);
+                            mTasks.add(mArray);
                             mTaskPath.add(mArKey);
                             }
                         }
@@ -178,32 +184,31 @@ public class HomeActivity extends AppCompatActivity {
         ArrayList<Boolean> newCompleted = new ArrayList<>();
         if ( requestCode == 1 ) {
             if ( resultCode == RESULT_OK ) {
-                boolean[] completed = data.getBooleanArrayExtra("result");
-                for ( int i = 0 ; i < completed.length; i++ ) {
-                    newCompleted.add(completed[i]);
-
-                    int position = data.getIntExtra("position",0);
-                    ArrayList<ChallengeTask> tsks = mTasks.get(position);
-                    int complete = 0;
-                    int j = 0;
-                    for ( ChallengeTask task : tsks ) {
-                        task.setComplete(newCompleted.get(j) ? "true" : "false");
-                        complete += newCompleted.get(j) ? 1 : 0;
-                        j++;
+                if ( data != null) {
+                    int completedTasks = 0;
+                    boolean[] completed = data.getBooleanArrayExtra("result");
+                    for ( int i = 0 ; i < completed.length; i++ ) {
+                        newCompleted.add(completed[i]);
+                        completedTasks += ( completed[i] ? 1 : 0 );
                     }
+                    int position = data.getIntExtra("position",0);
 
-                    mTasks.set(position,tsks);
-                    String text = "complete/" + j;
+                    String nmbTask = "";
+                    if ( newCompleted.size() == completedTasks ) {
+                        nmbTask = "successfully completed";
+                    } else {
+                        nmbTask = "completed " + completedTasks + "/" + newCompleted.size();
+                    }
+                    ArrayList<String> newNumbersOfTasks = new ArrayList<String>();
 
-                    Log.d(TAG," patko :" + text );
-
-                    mNumbersOfTasks.set(position, text);
-                    adapter.update(mNumbersOfTasks);
-                }
-
+                    for ( String s : this.mNumbersOfTasks) {
+                        newNumbersOfTasks.add(s);
+                    }
+                    newNumbersOfTasks.set(position,nmbTask);
+                    adapter.update(newNumbersOfTasks);
                 }
             }
-
-
+        }
     }
+
 }

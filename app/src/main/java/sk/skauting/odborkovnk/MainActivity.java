@@ -19,6 +19,15 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import sk.skauting.odborkovnk.Model.Challenge;
+import sk.skauting.odborkovnk.Model.ChallengeTask;
+import sk.skauting.odborkovnk.Model.User;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -50,6 +59,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         buttonLogin.setOnClickListener(this);
         textViewRegister.setOnClickListener(this);
+
+        uploadNewChallenge();
     }
 
     @Override
@@ -115,6 +126,44 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent profileActivity = new Intent(this, HomeActivity.class);
         profileActivity.putExtra("email",currentUser.getEmail());
         startActivity(profileActivity);
+    }
+
+    private void uploadNewChallenge() {
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference refDatabase = database.getReference("challenges");
+//
+//        String uloha = "Vediem si astronomický denník, kde si zaznamenávam moje pozorovania aj s náčrtmi.";
+//        String uloha2 = "Družine či oddielu som vysvetlil princíp zatmenia Slnka a Mesiaca a takisto princíp striedania ročných období.";
+//        String uloha3 = "Vyrobil som jednoduchú maketu slnečnej sústavy a snažil som sa zachovať proporčné veľkosti. Predviedol som ju družine aj s rozprávaním o vzdialenostiach a zložení jednotlivých hviezd.";
+//        String uloha4 = "Urobil som 20 kartičiek súhvezdí (poloha hviezd, významné hviezdy, známe legendy), ak ma niekto požiadal, pomohol som mu ich nájsť na oblohe.";
+//        String uloha5 = "Pozoroval som mesiac ďalekohľadom. Podľa mapy som na ňom našiel vyznačené objekty.";
+//        String uloha6 = "Prečítal som aspoň jednu knihu o astronómii.";
+//
+//        ChallengeTask tas = new ChallengeTask("false",uloha);
+//        ChallengeTask tas2 = new ChallengeTask("false",uloha2);
+//        ChallengeTask tas3 = new ChallengeTask("false",uloha3);
+//        ChallengeTask tas4 = new ChallengeTask("false",uloha4);
+//        ChallengeTask tas5 = new ChallengeTask("false",uloha5);
+//        ChallengeTask tas6 = new ChallengeTask("false",uloha6);
+//
+//        Map<String,ChallengeTask> tasks = new HashMap<>();
+//        String key = refDatabase.push().getKey();
+//        tasks.put(key,tas);
+//        key = refDatabase.push().getKey();
+//        tasks.put(key,tas2);
+//        key = refDatabase.push().getKey();
+//        tasks.put(key,tas3);
+//        key = refDatabase.push().getKey();
+//        tasks.put(key,tas4);
+//        key = refDatabase.push().getKey();
+//        tasks.put(key,tas5);
+//        key = refDatabase.push().getKey();
+//        tasks.put(key,tas6);
+//
+//        Challenge ch = new Challenge("Hvezdár","Hvezdar je odborka zamerana na hviezdy","https://firebasestorage.googleapis.com/v0/b/odborkovnik.appspot.com/o/Hvezdar.png?alt=media&token=d9131f3c-d277-407d-b27b-4921854fc64e",tasks);
+//
+//        String keyId = refDatabase.push().getKey();
+//        refDatabase.child(keyId).setValue(ch);
     }
 
 }

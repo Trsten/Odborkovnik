@@ -19,6 +19,23 @@
         app:title="Select Challenge"
         app:titleMarginStart="10dp"/>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycleViewSelect"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/selChellengeToolbar" />
 
+    <ProgressBar
+        android:id="@+id/loadingDataSelectPb"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/recycleViewSelect"
+        app:layout_constraintEnd_toStartOf="@+id/recycleViewSelect"
+        app:layout_constraintStart_toEndOf="@+id/recycleViewSelect"
+        app:layout_constraintTop_toBottomOf="@+id/recycleViewSelect" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

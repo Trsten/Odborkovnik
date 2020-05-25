@@ -49,7 +49,7 @@ public class RecycleViewChallengesAdapter extends RecyclerView.Adapter<RecycleVi
 
     public void update(List<String> newList)
     {
-        MyDiffUtilCallBack diffUtilCallBack = new MyDiffUtilCallBack(this.mNumbersOfTasks,newList);
+        ChalDiffUtilCallBack diffUtilCallBack = new ChalDiffUtilCallBack(this.mNumbersOfTasks,newList);
         DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffUtilCallBack);
 
         this.mNumbersOfTasks.clear();
@@ -68,6 +68,9 @@ public class RecycleViewChallengesAdapter extends RecyclerView.Adapter<RecycleVi
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         Log.d(TAG,"onBindViewHolder : called.");
+        for ( String asd : mNumbersOfTasks ) {
+            Log.d(TAG, "onBindHolder : values " + asd);
+        }
         Glide.with(context)
                 .asBitmap()
                 .load(mImagesNames.get(position))
@@ -106,7 +109,7 @@ public class RecycleViewChallengesAdapter extends RecyclerView.Adapter<RecycleVi
 
     @Override
     public int getItemCount() {
-        return mTitles.size();
+        return mNumbersOfTasks.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
