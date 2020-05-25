@@ -37,12 +37,14 @@ public class InfoChallengeActivity extends AppCompatActivity {
     private String title;
     private ArrayList<String> mTasks;
 
+    private Intent intent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        final Intent intent = getIntent();
+        intent = getIntent();
         imgUrl = intent.getStringExtra("imgUrl");
 
         title = intent.getStringExtra("title");
@@ -77,10 +79,9 @@ public class InfoChallengeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent resultIntend = new Intent();
-                String key = resultIntend.getStringExtra("key");
-                resultIntend.putExtra("keyChallenge", key);
-                setResult(RESULT_OK,resultIntend);
+                String key = intent.getStringExtra("key");
+                intent.putExtra("keyChallenge", key);
+                setResult(RESULT_OK,intent);
 
                 finish();
                 }

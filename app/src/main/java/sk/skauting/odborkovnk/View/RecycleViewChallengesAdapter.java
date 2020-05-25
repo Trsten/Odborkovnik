@@ -18,9 +18,11 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import sk.skauting.odborkovnk.DetailActivity;
+import sk.skauting.odborkovnk.Model.Challenge;
 import sk.skauting.odborkovnk.Model.ChallengeTask;
 import sk.skauting.odborkovnk.R;
 
@@ -65,6 +67,27 @@ public class RecycleViewChallengesAdapter extends RecyclerView.Adapter<RecycleVi
         this.mNumbersOfTasks.addAll(newList);
         diffResult.dispatchUpdatesTo(this);
     }
+
+    public void insertData(Challenge challenge,String numberOfTasks,String mChallengePath) {
+        mImagesNames.add(challenge.getImageUrl());
+        mTitles.add(challenge.getTitle());
+        mNumbersOfTasks.add(numberOfTasks);
+
+        ArrayList<ChallengeTask> tsk = new ArrayList<>();
+        ArrayList<String> mArKey = new ArrayList<>();
+
+        Map<String, ChallengeTask> tasks = challenge.getTasks();
+        for (Map.Entry<String, ChallengeTask> task : tasks.entrySet()) {
+
+            tsk.add(task.getValue());
+            mArKey.add(task.getKey());
+        }
+        mTaskPath.add(mArKey);
+        mTasks.add(tsk);
+        this.mChallengePath.add(mChallengePath);
+    }
+
+
 
     @NonNull
     @Override

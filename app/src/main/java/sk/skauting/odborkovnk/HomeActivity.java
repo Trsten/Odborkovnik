@@ -195,6 +195,7 @@ public class HomeActivity extends AppCompatActivity {
             Log.d(TAG,"prekreslujem : onCreate");
         }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -227,8 +228,28 @@ public class HomeActivity extends AppCompatActivity {
             }
         } else if ( requestCode == 2) {
             if ( resultCode == RESULT_OK ) {
-                Intent intent = new Intent();
+                final String keyChallenge = data.getStringExtra("keyChallenge");
+                refDatabase = firebaseDatabase.getReference("challenges" );
+                refDatabase.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                            if ( ds.getKey().equals(keyChallenge) ) {
+                                Challenge ch = ds.getValue(Challenge.class);
+                                refDatabase = firebaseDatabase.getReference(mPath+ "/challenges");
+                                String keyId = refDatabase.push().getKey();
+                                refDatabase.child(keyId).setValue(ch);
+                                adapter.insertData(ch,setTaskText(ch),mPath + "/challenges/" + ds.getKey() );
+                                adapter.notifyDataSetChanged();
+                            }
+                        }
 
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                    }
+                });
             }
         }
 

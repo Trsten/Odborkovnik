@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import sk.skauting.odborkovnk.InfoChallengeActivity;
+import sk.skauting.odborkovnk.Model.Challenge;
 import sk.skauting.odborkovnk.R;
 
 public class RecycleViewSelectChallenges extends RecyclerView.Adapter<RecycleViewSelectChallenges.ViewHolder> {
@@ -97,8 +98,5 @@ public class RecycleViewSelectChallenges extends RecyclerView.Adapter<RecycleVie
         }
     }
 
-    private boolean alearedyHaveChallenge() {
-        //TODO: compare challenges which i have
-        return false;
-    }
+
 }
